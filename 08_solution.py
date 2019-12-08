@@ -1,6 +1,6 @@
 import time
 simple = False
-verbose = 1
+verbose = 0
 start_time = time.time()
 
 if simple:
@@ -18,10 +18,7 @@ else:
     width = 25
     height = 6
 
-d = list(data)
-if d[-1] == '\n':
-    del(d[-1])
-d = [int(n) for n in list(d)]
+d = list(map(int, data.strip()))
 
 layers = []
 for ofs in range(0, len(d), width * height):
