@@ -1,6 +1,6 @@
 import time
 simple = False
-verbose = 0
+verbose = 1
 start_time = time.time()
 
 if simple:
@@ -23,63 +23,32 @@ if d[-1] == '\n':
     del(d[-1])
 d = [int(n) for n in list(d)]
 
-image = width * height * [0]
 layers = []
-zeroes = []
-i = 0
-zero = 0
-for px in d:
-    if verbose > 2:
-        print("x = %i, y = %i, px = %i" % (x, y, px))
-    image[i] = px
-    if px == 0:
-        zero += 1
-    i += 1
-    if i == width * height:
-        if verbose > 2:
-            print("layer: %s" % str(image))
-        layers.append(image.copy())
-        zeroes.append(zero)
-        zero = 0
-        i = 0
+for ofs in range(0, len(d), width * height):
+    layers.append(d[ofs:width * height + ofs])
 
-i = 0
 lowest = width * height
-lowlayer = -1
-while i < len(layers):
+lowLayer = 0
+for i in range(len(layers)):
     if verbose > 1:
-        print("layer %i z%i = %s" % (i, zeroes[i], str(layers[i])))
-    if zeroes[i] < lowest:
-        lowest = zeroes[i]
-        lowlayer = i
-    i += 1
+        print("layer %i z %i = %s" % (i, layers[i].count(0), str(layers[i])))
+    if layers[i].count(0) < lowest:
+        lowest = layers[i].count(0)
+        lowLayer = i
 
 if verbose > 0:
-    print("lowest layer %i" % lowlayer)
+    print("lowest layer %i" % lowLayer)
 
-sum1 = 0
-sum2 = 0
-for i in layers[lowlayer]:
-    if i == 1:
-        sum1 += 1
-    if i == 2:
-        sum2 += 1
-
-print("code: %i" % (sum1 * sum2))
+print("code: %i" % (layers[lowLayer].count(1) * layers[lowLayer].count(2)))
 
 middle_time = time.time()
 print("time elapsed: %s" % (middle_time - start_time))
 
 image = width * height * [2]
-
-i = 0
-while i < len(layers):
-    j = 0
-    while j < width * height:
+for i in range(len(layers)):
+    for j in range(width * height):
         if image[j] == 2 and layers[i][j] < 2:
             image[j] = layers[i][j]
-        j += 1
-    i += 1
 
 for i in range(height):
     print(image[i*width:(i+1)*width])
