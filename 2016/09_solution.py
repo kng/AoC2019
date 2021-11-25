@@ -1,5 +1,5 @@
 # --- Day 9: Explosives in Cyberspace ---
-# https://adventofcode.com/2021/day/9
+# https://adventofcode.com/2016/day/9
 
 import time
 import collections
